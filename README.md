@@ -1,41 +1,56 @@
 # Wait
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/wait`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple wait/polling gem.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wait'
+gem 'wait', git: 'git@github.atl.pdrop.net:dmcneil/wait.git'
 ```
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install wait
+    $ bundle install
 
 ## Usage
 
-TODO: Write usage instructions here
+Just `include Wait` and the following APIs will be available.
 
-## Development
+```ruby
+wait('foo').to eq 'foo' # Will pass.
+wait('foo').to eq 'bar' # Will throw exception.
+wait('foo').to_not eq 'bar' # Will pass.
+wait('foo').to_not eq 'foo' # Will fail.
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+To adjust the timeout/polling, simple chain methods are supported.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+The *for* method accepts an Integer and adjusts the timeout. Use the *every* method with an Integer to adjust the polling time.
 
-## Contributing
+```ruby
+# Wait for 30 seconds, polling every 2 second.
+wait('foo').every(2).for(30).to eq 'foo'
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/wait.
+You do *not* have to use both methods, you can adjust one or the other. They can also be used in any order.
 
+```ruby
+# Wait for 30 seconds, using the default 1 second poll.
+wait('foo').for(30).to eq 'foo'
 
-## License
+# Wait for the default 15 seconds, polling every 5 seconds.
+wait('foo').every(5).to eq 'foo'
+```
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+You can also pass a block to be evaluated, using *until*, until it is true.
+
+```ruby
+wait.until { true == true }
+
+wait.every(5).for(30).until {
+  true == true
+}
+```
 
