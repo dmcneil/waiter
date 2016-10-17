@@ -1,4 +1,4 @@
-# Wait
+# Waiter
 
 A simple wait/polling gem.
 
@@ -7,7 +7,7 @@ A simple wait/polling gem.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'wait', git: 'git@github.atl.pdrop.net:dmcneil/wait.git'
+gem 'waiter', git: 'git@github.atl.pdrop.net:dmcneil/waiter.git'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 ## Usage
 
-Just `include Wait` and the following APIs will be available.
+Just `include Waiter` and the following APIs will be available.
 
 ```ruby
 wait('foo').to eq 'foo' # Will pass.

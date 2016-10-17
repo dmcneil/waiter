@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require_relative 'lib/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'wait'
-  spec.version       = Wait::VERSION
+  spec.name          = 'waiter'
+  spec.version       = Waiter::VERSION
   spec.authors       = ['Derek McNeil']
   spec.email         = ['dmcneil@pindropsecurity.com']
 
   spec.summary       = 'A simple polling gem.'
-  spec.homepage      = 'https://github.atl.pdrop.net/dmcneil/wait'
+  spec.homepage      = 'https://github.atl.pdrop.net/dmcneil/waiter'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
