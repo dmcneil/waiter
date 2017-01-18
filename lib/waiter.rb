@@ -101,6 +101,8 @@ module Waiter
       current_timeout = @timeout
 
       while current_timeout > 0 && current_timeout > @polling
+        trap('SIGINT') { break }
+
         @result = begin
           block.call
         rescue SystemExit, Interrupt
