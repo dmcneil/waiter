@@ -32,7 +32,7 @@ Use the *every* method with an Integer to adjust the polling time.
 
 ```ruby
 # Wait for 30 seconds, polling every 2 second.
-wait.for('foo').every(2).up_to(30).to eq 'foo'
+wait.every(2).up_to(30).for('foo').to eq 'foo'
 ```
 
 You do *not* have to use both methods, you can adjust one or the other. They can also be used in any order.
