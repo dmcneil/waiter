@@ -60,7 +60,7 @@ module Waiter
     def initialize(opts = {})
       @timeout = opts[:timeout] || DEFAULT_TIMEOUT
       @polling = opts[:polling] || DEFAULT_POLLING
-      @failure_message = opts[:failure_message] || build_error
+      @failure_message = opts[:failure_message] || default_failure_message
     end
 
     def for(value = nil, &block)
@@ -83,6 +83,11 @@ module Waiter
       self
     end
     alias_method :polling_every, :every
+
+    def fail_with(message)
+      @failure_message = message
+      self
+    end
 
     def to(matcher = nil, &block)
       WaitExpectationTarget.new(@target).to(self, matcher, &block)
@@ -130,10 +135,16 @@ module Waiter
 
     private
 
-    def build_error(error = nil)
+    def default_failure_message
       [
         "Timed out after waiting for #{@timeout}s.",
-        "Polled for #{@polling}s.",
+        "Polled for #{@polling}s."
+      ].join("\n")
+    end
+
+    def build_error(error = nil)
+      [
+        @failure_message,
         error
       ].join("\n")
     end
