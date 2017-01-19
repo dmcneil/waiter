@@ -54,3 +54,17 @@ wait.every(5).up_to(30).until {
   true == true
 }
 ```
+
+A custom failure message can be prepended.
+
+```ruby
+wait.fail_with("A custom message").for('foo').to eq 'bar'
+
+#=> Waiter::TimeoutError:
+#     A custom message
+#     Timed out after waiting for 15s.
+#     Polled every 1s.
+#
+#     Expected: 'bar'
+#     got: 'foo'
+```

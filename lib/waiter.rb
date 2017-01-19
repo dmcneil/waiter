@@ -60,7 +60,7 @@ module Waiter
     def initialize(opts = {})
       @timeout = opts[:timeout] || DEFAULT_TIMEOUT
       @polling = opts[:polling] || DEFAULT_POLLING
-      @failure_message = opts[:failure_message] || default_failure_message
+      @failure_message = opts[:failure_message]
     end
 
     def for(value = nil, &block)
@@ -135,16 +135,11 @@ module Waiter
 
     private
 
-    def default_failure_message
-      [
-        "Timed out after waiting for #{@timeout}s.",
-        "Polled for #{@polling}s."
-      ].join("\n")
-    end
-
     def build_error(error = nil)
       [
         @failure_message,
+        "Timed out after waiting for #{@timeout}s.",
+        "Polled every #{@polling}s.",
         error
       ].join("\n")
     end
