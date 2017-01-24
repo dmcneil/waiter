@@ -1,8 +1,8 @@
 require 'rspec/expectations'
 
-require_relative 'timeout_error'
-
 module Waiter
+  class TimeoutError < StandardError; end
+
   # Wrapper for RSpec expectations that allows waiting/polling.
   #
   # The default timeout is 15 seconds, polling every 1 second.
@@ -45,7 +45,7 @@ module Waiter
   #     true == true
   #   }
   #
-  # @author Derek McNeil <dmcneil@pindrop.com>
+  # @author Derek McNeil <derek.mcneil90@gmail.com>
   def wait(opts = {}, &block)
     ChainableWait.new(opts)
   end
@@ -63,6 +63,10 @@ module Waiter
       @failure_message = opts[:failure_message]
     end
 
+    # The target/block being polled.
+    #
+    # @param value [Object] an object to assert
+    # @param block [Proc] a block to execute and assert
     def for(value = nil, &block)
       if value
         @target = value
@@ -73,31 +77,48 @@ module Waiter
       self
     end
 
+    # When the wait will timeout and fail.
+    #
+    # @param seconds [Integer] time in seconds
     def up_to(seconds)
       @timeout = seconds
       self
     end
 
+    # How often the target is polled for a result.
+    #
+    # @param seconds [Integer] time in seconds
     def every(seconds)
       @polling = seconds
       self
     end
     alias_method :polling_every, :every
 
+    # Use a custom message in the timeout exception.
+    #
+    # @param message [String] a custom message
     def fail_with(message)
       @failure_message = message
       self
     end
 
+    # Positive assert the target with an RSpec matcher.
+    #
+    # @param matcher [RSpec::Matcher]
     def to(matcher = nil, &block)
       WaitExpectationTarget.new(@target).to(self, matcher, &block)
     end
 
+    # Negative assert the target with an RSpec matcher.
+    #
+    # @param matcher [RSpec::Matcher]
     def not_to(matcher = nil, &block)
       WaitExpectationTarget.new(@target).not_to(self, matcher, &block)
     end
     alias_method :to_not, :not_to
 
+    # Executes a block repeatedly until either the expected result
+    # or a timeout occurs.
     def until(&block)
       unless @timeout > @polling
         raise ArgumentError, 'Timeout must be a higher value than polling.'
@@ -135,6 +156,7 @@ module Waiter
 
     private
 
+    # @api private
     def build_error(error = nil)
       [
         @failure_message,
@@ -145,7 +167,7 @@ module Waiter
     end
   end
 
-  class WaitExpectationTarget < RSpec::Expectations::ExpectationTarget
+  class WaitExpectationTarget < RSpec::Expectations::ExpectationTarget # :nodoc:
     def to(waiter, matcher = nil, &block)
       prevent_operator_matchers(:to) unless matcher
       waiter.until do

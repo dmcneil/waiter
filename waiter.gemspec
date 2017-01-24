@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'waiter_'
   spec.version       = Waiter::VERSION
   spec.authors       = ['Derek McNeil']
-  spec.email         = ['dmcneil@pindropsecurity.com']
+  spec.email         = ['derek.mcneil90@gmail.com']
 
   spec.summary       = 'A simple polling gem.'
-  spec.homepage      = 'https://github.atl.pdrop.net/dmcneil/waiter'
+  spec.homepage      = 'https://github.com/dmcneil/waiter'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ['lib']
